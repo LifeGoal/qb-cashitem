@@ -51,16 +51,16 @@ Just some shitty code to make cash usable. No support will be given, if you have
         amount = tonumber(amount)
         if amount < 0 then return false end
         if moneytype == 'cash' then
-			if self.Functions.GetItemByName('cash') then
-				local playerCash = self.Functions.GetItemByName('cash').amount
-				self.Functions.RemoveItem('cash', playerCash)
-				self.Functions.AddItem('cash', amount)
-			else
-				self.Functions.AddItem('cash', amount)
-			end
-		elseif self.PlayerData.money[moneytype] then
-			self.PlayerData.money[moneytype] = amount
+		if self.Functions.GetItemByName('cash') then
+			local playerCash = self.Functions.GetItemByName('cash').amount
+			self.Functions.RemoveItem('cash', playerCash)
+			self.Functions.AddItem('cash', amount)
+		else
+			self.Functions.AddItem('cash', amount)
 		end
+	elseif self.PlayerData.money[moneytype] then
+		self.PlayerData.money[moneytype] = amount
+	end
 
         self.Functions.UpdatePlayerData()
         TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'SetMoney', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') set, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype])
